@@ -41,7 +41,7 @@
 			/>
 			<span class="actions__button__text">Heal</span>
 		</button>
-		<button class="actions__button">
+		<button class="actions__button" @click="surrender">
 			<img
 				class="actions__button__image"
 				src="https://monster-slayer.onrender.com/assets/peace.png"
@@ -50,6 +50,21 @@
 			<span class="actions__button__text">Surrender</span>
 		</button>
 	</section>
+	<base-dialog
+		v-if="winner === 'monster'"
+		title="You lose..."
+		text="You are dead."
+	></base-dialog>
+	<base-dialog
+		v-if="winner === 'player'"
+		title="You won !"
+		text="The monster is dead."
+	></base-dialog>
+	<base-dialog
+		v-if="winner === 'surrender'"
+		title="You surrendered..."
+		text="You dropped your weapon."
+	></base-dialog>
 	<the-footer></the-footer>
 </template>
 
@@ -57,12 +72,14 @@
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
 import CharacterCard from '@/components/character/CharacterCard.vue';
+import BaseDialog from '@/components/base/BaseDialog.vue';
 
 export default {
-	components: { CharacterCard, TheFooter, TheHeader },
+	components: { BaseDialog, CharacterCard, TheFooter, TheHeader },
 	data() {
 		return {
 			currentRound: 0,
+			winner: null,
 			remainingSpecialAttacks: 2,
 			remainingHeals: 3,
 			monster: {
@@ -109,6 +126,24 @@ export default {
 				return false;
 			}
 			return true;
+		},
+		playerHealth(): number {
+			return this.player.health.currentHealth;
+		},
+		monsterHealth(): number {
+			return this.monster.health.currentHealth;
+		},
+	},
+	watch: {
+		playerHealth(value: number) {
+			if (value <= 0) {
+				this.winner = 'monster';
+			}
+		},
+		monsterHealth(value: number) {
+			if (value <= 0) {
+				this.winner = 'player';
+			}
 		},
 	},
 	methods: {
@@ -171,6 +206,9 @@ export default {
 			this.remainingHeals--;
 			this.currentRound++;
 			setTimeout(this.attackPlayer, 200);
+		},
+		surrender() {
+			this.winner = 'surrender';
 		},
 	},
 };
