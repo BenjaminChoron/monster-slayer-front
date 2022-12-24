@@ -28,7 +28,12 @@
 			/>
 			<span class="actions__button__text">Special</span>
 		</button>
-		<button class="actions__button">
+		<button
+			class="actions__button"
+			@click="healPlayer"
+			:disabled="!mayUseHeal"
+		>
+			<span class="actions__button__count">{{ remainingHeals }}</span>
 			<img
 				class="actions__button__image"
 				src="https://monster-slayer.onrender.com/assets/potion.png"
@@ -96,6 +101,15 @@ export default {
 		mayUseSpecialAttack(): boolean {
 			return this.remainingSpecialAttacks === 0;
 		},
+		mayUseHeal(): boolean {
+			if (
+				this.player.health.currentHealth ===
+				this.player.health.maxHealth
+			) {
+				return false;
+			}
+			return true;
+		},
 	},
 	methods: {
 		getRandomValue(min: number, max: number) {
@@ -111,6 +125,10 @@ export default {
 			} else {
 				this.monster.health.currentHealth -= attackValue;
 			}
+
+			if (this.monster.health.currentHealth > 0) {
+				this.attackPlayer();
+			}
 		},
 		specialAttackMonster() {
 			this.remainingSpecialAttacks--;
@@ -123,6 +141,36 @@ export default {
 			} else {
 				this.monster.health.currentHealth -= attackValue;
 			}
+
+			if (this.monster.health.currentHealth > 0) {
+				this.attackPlayer();
+			}
+		},
+		attackPlayer() {
+			const min = 12 * (this.monster.health.level * 0.5);
+			const max = 22 * (this.monster.health.level * 0.5);
+			const attackValue = this.getRandomValue(min, max);
+			if (this.player.health.currentHealth < attackValue) {
+				this.player.health.currentHealth = 0;
+			} else {
+				this.player.health.currentHealth -= attackValue;
+			}
+		},
+		healPlayer() {
+			const min = 20 * (this.player.health.level * 0.5);
+			const max = 35 * (this.player.health.level * 0.5);
+			const healValue = this.getRandomValue(min, max);
+			if (
+				this.player.health.currentHealth + healValue >
+				this.player.health.maxHealth
+			) {
+				this.player.health.currentHealth = this.player.health.maxHealth;
+			} else {
+				this.player.health.currentHealth += healValue;
+			}
+			this.remainingHeals--;
+			this.currentRound++;
+			setTimeout(this.attackPlayer, 200);
 		},
 	},
 };
