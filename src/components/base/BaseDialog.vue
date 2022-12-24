@@ -1,13 +1,13 @@
 <template>
-    <dialog open>
-        <h2>Title</h2>
-        <p>text</p>
-    </dialog>
+	<dialog open>
+		<h2>Title</h2>
+		<p>text</p>
+	</dialog>
 </template>
 
 <script>
 export default {
-    name: 'BaseDialog',
+	name: 'BaseDialog',
 };
 </script>
 

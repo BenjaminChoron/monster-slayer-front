@@ -18,4 +18,10 @@ h1 {
 	font-family: 'Press Start 2P', cursive;
 	text-align: center;
 }
+@media screen and (max-width: 550px) {
+	h1 {
+		font-size: 1.3rem;
+		padding: 1.3rem;
+	}
+}
 </style>

@@ -20,6 +20,7 @@ export default {
 	padding: 1rem;
 }
 .copyright {
+	font-family: Roboto, sans-serif;
 	font-weight: 100;
 }
 .rules {
@@ -27,6 +28,7 @@ export default {
 	background: transparent;
 	border: 1px solid var(--color-border);
 	border-radius: 0.4rem;
+	font-family: Roboto, sans-serif;
 	color: var(--color-text);
 	cursor: pointer;
 	transition: all 0.2s linear;
