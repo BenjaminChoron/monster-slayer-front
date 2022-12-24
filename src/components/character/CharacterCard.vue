@@ -9,7 +9,7 @@
 		<div class="card__infos">
 			<health-bar :character="character.health"></health-bar>
 			<experience-bar
-				v-if="character.xp"
+				v-if="character.xp !== null"
 				:character-xp="character.xp"
 			></experience-bar>
 		</div>

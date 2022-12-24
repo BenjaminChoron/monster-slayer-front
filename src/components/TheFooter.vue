@@ -35,8 +35,9 @@ export default {
 
 	&:hover,
 	&:focus {
+		outline: none;
+		background-color: var(--color-accent);
 		color: var(--color-text-hover);
-		border-color: var(--color-border-hover);
 	}
 }
 </style>

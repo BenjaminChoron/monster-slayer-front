@@ -5,7 +5,7 @@
 		<character-card :character="player"></character-card>
 	</main>
 	<section class="actions">
-		<button class="actions__button">
+		<button class="actions__button" @click="attackMonster">
 			<img
 				class="actions__button__image"
 				:src="player.weapon.image"
@@ -13,7 +13,14 @@
 			/>
 			<span class="actions__button__text">Attack</span>
 		</button>
-		<button class="actions__button">
+		<button
+			class="actions__button"
+			@click="specialAttackMonster"
+			:disabled="mayUseSpecialAttack"
+		>
+			<span class="actions__button__count">{{
+				remainingSpecialAttacks
+			}}</span>
 			<img
 				class="actions__button__image"
 				:src="player.special.image"
@@ -50,14 +57,17 @@ export default {
 	components: { CharacterCard, TheFooter, TheHeader },
 	data() {
 		return {
+			currentRound: 0,
+			remainingSpecialAttacks: 2,
+			remainingHeals: 3,
 			monster: {
 				image: 'https://monster-slayer.onrender.com/assets/minotaur.png',
 				altText: 'minotaur monster image',
 				name: 'Minotaur',
 				health: {
 					level: 1,
-					currentHealth: 150,
-					maxHealth: 200,
+					currentHealth: 100,
+					maxHealth: 100,
 				},
 				xp: null,
 			},
@@ -67,10 +77,10 @@ export default {
 				name: 'Knight',
 				health: {
 					level: 1,
-					currentHealth: 110,
-					maxHealth: 190,
+					currentHealth: 100,
+					maxHealth: 100,
 				},
-				xp: 75,
+				xp: 0,
 				weapon: {
 					image: 'https://monster-slayer.onrender.com/assets/sword.png',
 					altText: 'sword',
@@ -81,6 +91,39 @@ export default {
 				},
 			},
 		};
+	},
+	computed: {
+		mayUseSpecialAttack(): boolean {
+			return this.remainingSpecialAttacks === 0;
+		},
+	},
+	methods: {
+		getRandomValue(min: number, max: number) {
+			return Math.floor(Math.random() * (max - min)) + min;
+		},
+		attackMonster() {
+			this.currentRound++;
+			const min = 10 * (this.player.health.level * 0.5);
+			const max = 20 * (this.player.health.level * 0.5);
+			const attackValue = this.getRandomValue(min, max);
+			if (this.monster.health.currentHealth < attackValue) {
+				this.monster.health.currentHealth = 0;
+			} else {
+				this.monster.health.currentHealth -= attackValue;
+			}
+		},
+		specialAttackMonster() {
+			this.remainingSpecialAttacks--;
+			this.currentRound++;
+			const min = 20 * (this.player.health.level * 0.5);
+			const max = 30 * (this.player.health.level * 0.5);
+			const attackValue = this.getRandomValue(min, max);
+			if (this.monster.health.currentHealth < attackValue) {
+				this.monster.health.currentHealth = 0;
+			} else {
+				this.monster.health.currentHealth -= attackValue;
+			}
+		},
 	},
 };
 </script>
@@ -106,17 +149,35 @@ export default {
 		background: transparent;
 		border: 1px solid var(--color-border);
 		border-radius: 0.4rem;
+		font-family: 'M PLUS Code Latin', sans-serif;
 		color: var(--color-text);
 		cursor: pointer;
 		transition: all 0.2s linear;
+
+		&__count {
+			position: absolute;
+			top: 0.2rem;
+			left: 0.2rem;
+			padding: 0.2rem 0.6rem;
+			border-radius: 50%;
+			background-color: var(--color-accent);
+			color: var(--color-background);
+		}
 
 		&__image {
 			width: 80%;
 		}
 
-		&:hover {
-			border-color: var(--color-accent);
-			color: var(--color-accent);
+		&:hover,
+		&:focus {
+			outline: none;
+			background-color: var(--color-accent);
+			color: var(--color-text-hover);
+
+			& .actions__button__count {
+				background-color: var(--color-background);
+				color: var(--color-text);
+			}
 		}
 	}
 }
@@ -129,6 +190,10 @@ export default {
 			margin: 0.2rem;
 			padding: 0.4rem;
 			font-size: 0.8rem;
+
+			&__image {
+				width: 75%;
+			}
 		}
 	}
 }

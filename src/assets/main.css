@@ -3,14 +3,14 @@
 :root {
 	--color-background: #f8f8f8;
 
-	--color-accent: orange;
+	--color-accent: #143866;
 
 	--color-border: #222222;
 	--color-border-hover: var(--color-accent);
 
 	--color-heading: #181818;
 	--color-text: #222222;
-	--color-text-hover: var(--color-accent);
+	--color-text-hover: var(--color-background);
 
 	--color-exp-background: #777777;
 	--color-exp-value: #3997dc;
@@ -23,14 +23,14 @@
 	:root {
 		--color-background: #181818;
 
-		--color-accent: orange;
+		--color-accent: #5792a7;
 
 		--color-border: #eeeeee;
 		--color-border-hover: var(--color-accent);
 
 		--color-heading: #f9f9f9;
 		--color-text: #eeeeee;
-		--color-text-hover: var(--color-accent);
+		--color-text-hover: var(--color-background);
 
 		--color-exp-background: #777777;
 		--color-exp-value: #3997dc;
