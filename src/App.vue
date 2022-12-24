@@ -1,19 +1,19 @@
 <template>
 	<the-header title="Monster Slayer"></the-header>
-	<main>
+	<main class="main-container">
 		<character-card
 			v-for="(player, index) in players"
 			:key="index"
 			:character="player"
 		></character-card>
 	</main>
-	<the-footer text="Footer"></the-footer>
+	<the-footer></the-footer>
 </template>
 
 <script lang="ts">
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
-import CharacterCard from '@/components/CharacterCard.vue';
+import CharacterCard from '@/components/character/CharacterCard.vue';
 
 export default {
 	components: { CharacterCard, TheFooter, TheHeader },
@@ -48,4 +48,10 @@ export default {
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.main-container {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+</style>

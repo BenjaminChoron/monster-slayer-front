@@ -31,15 +31,15 @@ export default {
 }
 .experience {
 	width: 100%;
-	height: 1rem;
-	border: 2px solid #cccccc;
+	height: 0.6rem;
+	border: 1px solid var(--color-border);
 	border-radius: 0.1rem;
-	margin: 1rem 0;
-	background: #777777;
+	margin: 1rem 0 0.4rem 0;
+	background: var(--color-exp-background);
 	overflow: hidden;
 
 	&__value {
-		background-color: #3997dc;
+		background-color: var(--color-exp-value);
 		height: 100%;
 	}
 }

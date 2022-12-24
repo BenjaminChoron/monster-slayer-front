@@ -42,15 +42,15 @@ export default {
 }
 .health {
 	width: 100%;
-	height: 2.6rem;
-	border: 2px solid #cccccc;
+	height: 0.8rem;
+	border: 1px solid var(--color-border);
 	border-radius: 2rem;
-	margin: 1rem 0;
-	background: #d54c4c;
+	margin: 1rem 0 0.4rem 0;
+	background: var(--color-health-background);
 	overflow: hidden;
 
 	&__value {
-		background-color: #00a876;
+		background-color: var(--color-health-value);
 		width: 100%;
 		height: 100%;
 	}

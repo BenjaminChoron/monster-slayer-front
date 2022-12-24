@@ -11,4 +11,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+h1 {
+	width: 100%;
+	padding: 2rem 0;
+	font-family: 'Press Start 2P', cursive;
+	text-align: center;
+}
+</style>
