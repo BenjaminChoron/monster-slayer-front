@@ -1,9 +1,20 @@
 <template>
 	<div class="overlay"></div>
 	<dialog class="dialog" open>
-		<h2>{{ title }}</h2>
-		<p>{{ text }}</p>
-		<button @click="clickHandler"></button>
+		<h2 class="dialog__title">{{ title }}</h2>
+		<p class="dialog__text">{{ text }}</p>
+		<div class="dialog__actions">
+			<button
+				v-if="action === 'surrender'"
+				class="dialog__actions__button"
+				@click="cancel"
+			>
+				cancel
+			</button>
+			<button class="dialog__actions__button" @click="clickHandler">
+				{{ action }}
+			</button>
+		</div>
 	</dialog>
 </template>
 
@@ -19,6 +30,9 @@ export default {
 	methods: {
 		clickHandler() {
 			this.$emit(this.action);
+		},
+		cancel() {
+			this.$emit('cancel');
 		},
 	},
 };
@@ -47,5 +61,33 @@ export default {
 	border: 2px solid var(--color-border);
 	color: var(--color-text);
 	border-radius: 0.4rem;
+
+	&__text {
+		margin: 1rem auto;
+	}
+
+	&__actions {
+		display: flex;
+		justify-content: space-evenly;
+
+		&__button {
+			padding: 0.4rem;
+			background: transparent;
+			border: 1px solid var(--color-border);
+			border-radius: 0.4rem;
+			font-family: Roboto, sans-serif;
+			text-transform: capitalize;
+			color: var(--color-text);
+			cursor: pointer;
+			transition: all 0.2s linear;
+
+			&:hover,
+			&:focus {
+				outline: none;
+				background-color: var(--color-accent);
+				color: var(--color-text-hover);
+			}
+		}
+	}
 }
 </style>

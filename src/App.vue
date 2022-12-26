@@ -68,8 +68,9 @@
 		v-if="winner === 'surrender'"
 		title="You surrendered..."
 		text="You dropped your weapon."
-		action="reset"
-		@reset="reset"
+		action="surrender"
+		@surrender="reset"
+		@cancel="cancel"
 	></base-dialog>
 	<the-footer></the-footer>
 </template>
@@ -87,7 +88,7 @@ export default {
 			currentRound: 0,
 			winner: null,
 			remainingSpecialAttacks: 2,
-			remainingHeals: 3,
+			remainingHeals: 2,
 			monster: {
 				image: 'https://monster-slayer.onrender.com/assets/minotaur.png',
 				altText: 'minotaur monster image',
@@ -97,6 +98,7 @@ export default {
 					currentHealth: 100,
 					maxHealth: 100,
 				},
+				strength: 1,
 			},
 			player: {
 				image: 'https://monster-slayer.onrender.com/assets/swordsman.png',
@@ -107,6 +109,7 @@ export default {
 					currentHealth: 100,
 					maxHealth: 100,
 				},
+				strength: 1,
 				weapon: {
 					image: 'https://monster-slayer.onrender.com/assets/sword.png',
 					altText: 'sword',
@@ -153,48 +156,54 @@ export default {
 		},
 		attackMonster() {
 			this.currentRound++;
-			const min = 10 * (this.player.health.level * 0.5);
-			const max = 20 * (this.player.health.level * 0.5);
+			const min = 10 * this.player.strength;
+			const max = 20 * this.player.strength;
 			const attackValue = this.getRandomValue(min, max);
 			if (this.monster.health.currentHealth < attackValue) {
 				this.monster.health.currentHealth = 0;
 			} else {
-				this.monster.health.currentHealth -= attackValue;
+				this.monster.health.currentHealth = Math.round(
+					this.monster.health.currentHealth - attackValue
+				);
 			}
 
 			if (this.monster.health.currentHealth > 0) {
-				this.attackPlayer();
+				setTimeout(this.attackPlayer, 200);
 			}
 		},
 		specialAttackMonster() {
 			this.remainingSpecialAttacks--;
 			this.currentRound++;
-			const min = 20 * (this.player.health.level * 0.5);
-			const max = 30 * (this.player.health.level * 0.5);
+			const min = 20 * this.player.strength;
+			const max = 30 * this.player.strength;
 			const attackValue = this.getRandomValue(min, max);
 			if (this.monster.health.currentHealth < attackValue) {
 				this.monster.health.currentHealth = 0;
 			} else {
-				this.monster.health.currentHealth -= attackValue;
+				this.monster.health.currentHealth = Math.round(
+					this.monster.health.currentHealth - attackValue
+				);
 			}
 
 			if (this.monster.health.currentHealth > 0) {
-				this.attackPlayer();
+				setTimeout(this.attackPlayer, 200);
 			}
 		},
 		attackPlayer() {
-			const min = 12 * (this.monster.health.level * 0.5);
-			const max = 22 * (this.monster.health.level * 0.5);
+			const min = 12 * this.monster.strength;
+			const max = 22 * this.monster.strength;
 			const attackValue = this.getRandomValue(min, max);
 			if (this.player.health.currentHealth < attackValue) {
 				this.player.health.currentHealth = 0;
 			} else {
-				this.player.health.currentHealth -= attackValue;
+				this.player.health.currentHealth = Math.round(
+					this.player.health.currentHealth - attackValue
+				);
 			}
 		},
 		healPlayer() {
-			const min = 20 * (this.player.health.level * 0.5);
-			const max = 35 * (this.player.health.level * 0.5);
+			const min = 20 * this.player.strength;
+			const max = 35 * this.player.strength;
 			const healValue = this.getRandomValue(min, max);
 			if (
 				this.player.health.currentHealth + healValue >
@@ -220,22 +229,31 @@ export default {
 			this.player.health.currentHealth = 100;
 			this.player.health.maxHealth = 100;
 			this.player.health.level = 1;
+			this.player.strength = 1;
 			// reset monster stats
 			this.monster.health.currentHealth = 100;
 			this.monster.health.maxHealth = 100;
 			this.monster.health.level = 1;
+			this.monster.strength = 1;
 		},
 		next() {
 			this.winner = null;
 			this.currentRound = 0;
+			this.remainingSpecialAttacks = 2;
+			this.remainingHeals = 3;
 			// update player stats
 			this.player.health.level++;
 			this.player.health.maxHealth = this.player.health.maxHealth + 20;
 			this.player.health.currentHealth = this.player.health.maxHealth;
+			this.player.strength = this.player.strength + 0.1;
 			// update monster stats
 			this.monster.health.level++;
 			this.monster.health.maxHealth = this.monster.health.maxHealth + 20;
 			this.monster.health.currentHealth = this.monster.health.maxHealth;
+			this.monster.strength = this.monster.strength + 0.1;
+		},
+		cancel() {
+			this.winner = null;
 		},
 	},
 };
