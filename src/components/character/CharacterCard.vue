@@ -8,21 +8,16 @@
 		<h3 class="card__name">{{ character.name }}</h3>
 		<div class="card__infos">
 			<health-bar :character="character.health"></health-bar>
-			<experience-bar
-				v-if="character.xp !== null"
-				:character-xp="character.xp"
-			></experience-bar>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import HealthBar from '@/components/character/HealthBar.vue';
-import ExperienceBar from '@/components/character/ExperienceBar.vue';
 
 export default {
 	name: 'CharacterCard',
-	components: { ExperienceBar, HealthBar },
+	components: { HealthBar },
 	props: {
 		character: {
 			image: String,
@@ -33,7 +28,6 @@ export default {
 				currentHealth: Number,
 				maxHealth: Number,
 			},
-			xp: Number,
 		},
 	},
 };

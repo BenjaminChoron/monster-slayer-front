@@ -54,16 +54,22 @@
 		v-if="winner === 'monster'"
 		title="You lose..."
 		text="You are dead."
+		action="reset"
+		@reset="reset"
 	></base-dialog>
 	<base-dialog
 		v-if="winner === 'player'"
 		title="You won !"
 		text="The monster is dead."
+		action="next"
+		@next="next"
 	></base-dialog>
 	<base-dialog
 		v-if="winner === 'surrender'"
 		title="You surrendered..."
 		text="You dropped your weapon."
+		action="reset"
+		@reset="reset"
 	></base-dialog>
 	<the-footer></the-footer>
 </template>
@@ -91,7 +97,6 @@ export default {
 					currentHealth: 100,
 					maxHealth: 100,
 				},
-				xp: null,
 			},
 			player: {
 				image: 'https://monster-slayer.onrender.com/assets/swordsman.png',
@@ -102,7 +107,6 @@ export default {
 					currentHealth: 100,
 					maxHealth: 100,
 				},
-				xp: 0,
 				weapon: {
 					image: 'https://monster-slayer.onrender.com/assets/sword.png',
 					altText: 'sword',
@@ -119,13 +123,10 @@ export default {
 			return this.remainingSpecialAttacks === 0;
 		},
 		mayUseHeal(): boolean {
-			if (
-				this.player.health.currentHealth ===
+			return (
+				this.player.health.currentHealth !==
 				this.player.health.maxHealth
-			) {
-				return false;
-			}
-			return true;
+			);
 		},
 		playerHealth(): number {
 			return this.player.health.currentHealth;
@@ -209,6 +210,32 @@ export default {
 		},
 		surrender() {
 			this.winner = 'surrender';
+		},
+		reset() {
+			this.winner = null;
+			this.currentRound = 0;
+			this.remainingSpecialAttacks = 2;
+			this.remainingHeals = 3;
+			// reset player stats
+			this.player.health.currentHealth = 100;
+			this.player.health.maxHealth = 100;
+			this.player.health.level = 1;
+			// reset monster stats
+			this.monster.health.currentHealth = 100;
+			this.monster.health.maxHealth = 100;
+			this.monster.health.level = 1;
+		},
+		next() {
+			this.winner = null;
+			this.currentRound = 0;
+			// update player stats
+			this.player.health.level++;
+			this.player.health.maxHealth = this.player.health.maxHealth + 20;
+			this.player.health.currentHealth = this.player.health.maxHealth;
+			// update monster stats
+			this.monster.health.level++;
+			this.monster.health.maxHealth = this.monster.health.maxHealth + 20;
+			this.monster.health.currentHealth = this.monster.health.maxHealth;
 		},
 	},
 };
